@@ -1,0 +1,16 @@
+# Licensed NYSE TAQ data (course kdb+ server): not redistributed publicly
+data/
+
+# Build and submission artefacts
+*.zip
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+report/*.aux
+report/*.log
+report/*.fls
+report/*.fdb_latexmk
+report/*.out
+report/*.synctex.gz
+report/report.pdf
+overleaf/

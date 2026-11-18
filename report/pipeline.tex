@@ -1,0 +1,24 @@
+% Data pipeline diagram, included by report.tex.
+\begin{tikzpicture}[
+  node distance=0.42cm,
+  box/.style={draw=ink, rounded corners=3pt, thick, fill=ink!6, align=center,
+              text width=2.55cm, minimum height=1.75cm, font=\footnotesize, inner sep=3pt},
+  hot/.style={box, fill=ink!16},
+  note/.style={font=\scriptsize\itshape, text=black!65, align=center, text width=2.6cm},
+  arrow/.style={-{Stealth[length=2.2mm]}, thick, draw=ink}
+]
+\node[box] (taq) {\textbf{NYSE TAQ}\\[1pt] trades and NBBO quotes\\ 30 Dow stocks\\ Feb 3--28, 2020};
+\node[hot, right=of taq] (q) {\textbf{q on the server}\\[1pt] as-of join to quotes\\ Lee--Ready signing\\ 1-second quote grid, OFI};
+\node[box, right=of q] (buckets) {\textbf{1-minute buckets}\\[1pt] price change, signed flow,\\ spread, depth, volatility};
+\node[box, right=of buckets] (features) {\textbf{Features}\\[1pt] conditions lagged\\ one minute; surprise\\ vs.\ expected flow};
+\node[box, right=of features, yshift=0.9cm, minimum height=1.15cm] (models) {\textbf{Impact models}\\[1pt] Questions 1--4};
+\node[box, right=of features, yshift=-0.9cm, minimum height=1.15cm] (exec) {\textbf{Execution backtest}\\[1pt] Question 5};
+\draw[arrow] (taq) -- (q);
+\draw[arrow] (q) -- (buckets);
+\draw[arrow] (buckets) -- (features);
+\draw[arrow] (features.east) -- ++(0.18,0) |- (models.west);
+\draw[arrow] (features.east) -- ++(0.18,0) |- (exec.west);
+\node[note, below=0.12cm of q] {one IPC call per day\\ about 7 seconds};
+\node[note, below=0.12cm of buckets] {222,300 rows,\\ cached as parquet};
+\node[note, below=0.12cm of features] {train Feb 3--14\\ test Feb 18--28};
+\end{tikzpicture}
